@@ -1,6 +1,6 @@
 [project]
 name = "file-watcher-poll"
-version = "0.1.0"
+version = "0.1.1"
 description = "Polls a set of paths for modification, deletion, and creation events using stat signatures."
 requires-python = ">=3.10"
 dependencies = []
