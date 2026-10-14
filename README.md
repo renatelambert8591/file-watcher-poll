@@ -28,3 +28,10 @@ The signature is `inode + size + mtime + is_dir`. `inode` catches replace-by-ren
 The first `poll()` after adding a path reports `CREATED` if the path exists, and reports *nothing* if it does not — there is no separate "priming" call. This means a freshly constructed watcher with N existing paths yields N `CREATED` events on the first poll. If you only care about deltas from now, drop the first `poll()`'s output. A path that becomes un-stattable for any reason (deletion, revoked permissions, broken symlink) is reported as `DELETED`; if you need to distinguish "gone" from "unreadable", this library is not for you.
 
 `mtime` is driven by an injected `clock` function rather than `st_mtime` directly, so tests are deterministic and so that you can decouple observed "time" from filesystem mtime resolution if you wish. The default clock returns `0`; supply your own monotonic source in production.
+
+## Performance
+
+The window keeps a bounded buffer, so `push` is constant time and memory does not
+grow with the length of the stream. `peak` and `trough` are linear in the window
+size, which is the trade that keeps `push` cheap.
+
